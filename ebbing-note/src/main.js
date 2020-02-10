@@ -7,7 +7,7 @@ import "./plugins/element.js";
 Vue.config.productionTip = false;
 
 new Vue({
-  router,
-  store,
+  router, //使用路由配置
+  store,//使用 Vuex 进行状态管理
   render: h => h(App)
 }).$mount("#app");

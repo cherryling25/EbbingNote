@@ -46,6 +46,10 @@
             @click.native.prevent="handleLogin">
             登录
           </el-button>
+          <!-- <el-button style="width: 100%" type="primary"
+            >
+            登录
+          </el-button> -->
         </el-form-item>
       </el-form>
     </el-card>
@@ -53,18 +57,20 @@
 </template>
  
 <script>
+import Axios from 'axios';
 export default {
   name: "login",
   data() {
     return {
       loginForm: {
-        username: "admin",
-        password: "123456"
+        username: "Jack",
+        password: "asdasd123"
       },
       loading: false,
       pwdType: "password",
     };
   },
+  
   methods: {
     showPwd() {
       if (this.pwdType === "password") {
@@ -74,7 +80,20 @@ export default {
       }
     },
     handleLogin() {
-      this.$router.push({path: "/home"});
+      var url = "http://192.168.43.221:8080/ebbingnote/useraccount/login";
+      let requestData = {userName : this.loginForm.username,password : this.loginForm.password};
+        Axios.post(url,requestData).then((response)=>{
+              let serverResponse = response.data;
+                if(serverResponse && serverResponse.data != null) {
+                    this.$router.push({path: "/home"});
+                } else {
+                  alert('username or password is incorrect');
+                }
+            }).catch((error)=>{
+                console.log(error);
+            })
+    }
+      // this.$router.push({path: "/home"});
       /* this.$refs.loginForm.validate(valid => {
         if (valid) {
           this.loading = true;
@@ -105,7 +124,6 @@ export default {
         }
       }); */
     }
-  }
 };
 </script>
  

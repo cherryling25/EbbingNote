@@ -1,6 +1,6 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
-import aside from '../components/aside.vue';
+import note from '../components/note.vue';
 import doc from '../components/doc.vue';
 import main from '../components/main.vue';
 
@@ -13,8 +13,8 @@ export const constantRouterMap = [
   { path: '/home', component: () => import('@/views/home'),
   children: [
     {
-      path: 'aside',
-      component: aside
+      path: 'note/:id',
+      component: note
     },
     {
       path: 'doc',
