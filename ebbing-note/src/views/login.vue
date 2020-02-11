@@ -85,7 +85,7 @@ export default {
         Axios.post(url,requestData).then((response)=>{
               let serverResponse = response.data;
                 if(serverResponse && serverResponse.data != null) {
-                    this.$router.push({path: "/home"});
+                    this.$router.push({path: "/home/"+serverResponse.data.id});
                 } else {
                   alert('username or password is incorrect');
                 }

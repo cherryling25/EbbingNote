@@ -10,7 +10,7 @@ export const constantRouterMap = [
   { path: '/', component: () => import('@/views/login')},
   { path: '/success', component: () => import('@/views/success')},
   { path: '/error', component: () => import('@/views/error'), hidden: true },
-  { path: '/home', component: () => import('@/views/home'),
+  { path: '/home/:id', component: () => import('@/views/home'),
   children: [
     {
       path: 'note/:id',
