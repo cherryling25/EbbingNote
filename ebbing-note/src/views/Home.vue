@@ -1,29 +1,27 @@
 <template>
   <div id="home">
-    <div class="icon">
+    <div class="icon" style=" display: flex;">
+      <el-aside width="200px">
         <i class="el-icon-circle-plus-outline"></i>
-            <el-button type="text" @click="dialogFormVisible = true">目录</el-button>
-          <i class="el-icon-circle-plus-outline"></i>
-            <el-button type="text" @click="dialogFormVisible1 = true">笔记</el-button>
-      <!-- TODO -->
-      <!-- <el-dropdown trigger="click">   
-        <span style="font-size:14px; cursor: pointer;">
-          <i class="el-icon-circle-plus-outline"></i>
-          新建
-          <i class="el-icon-arrow-down el-icon--right"></i>
-        </span>
-        <el-dropdown-menu slot="dropdown">
-          <el-dropdown-item>
-            <el-button type="text" @click="dialogFormVisible = true">目录</el-button>
-          </el-dropdown-item>
-          <el-dropdown-item>
-            <el-button type="text" @click="dialogFormVisible1 = true">笔记</el-button>
-          </el-dropdown-item>
-        </el-dropdown-menu>
-      </el-dropdown> -->
+        <el-button type="text" @click="dialogFormVisible = true">目录</el-button>
+        <i class="el-icon-circle-plus-outline"></i>
+        <el-button type="text" @click="dialogFormVisible1 = true">笔记</el-button>
+      </el-aside>
+
+      <el-header style="text-align: right; font-size: 12px;flex-grow: 1;">
+        <h2>EbbingNote</h2>
+        <el-dropdown trigger="click">
+          <i class="el-icon-setting" style="margin-right: 15px"></i>
+          <el-dropdown-menu slot="dropdown">
+            <el-dropdown-item @click.native="logout">退出登录</el-dropdown-item>
+          </el-dropdown-menu>
+        </el-dropdown>
+        <span style="font-size:18px;">{{userAccountName}}</span>
+      </el-header>
+    </div>
 
       <!-- 弹出框1 -->
-      <el-dialog title="目录" :visible.sync="dialogFormVisible" width="30%">
+      <el-dialog title="新建目录" :visible.sync="dialogFormVisible" width="30%">
         <el-form :model="categoryForm">
           <el-form-item label="名称" :label-width="formLabelWidth">
             <el-input v-model="categoryForm.name" autocomplete="off"></el-input>
@@ -58,19 +56,7 @@
         </div>
       </el-dialog>
 
-      <el-header style="text-align: right; font-size: 12px; width:86%;float: right;">
-        <h2>EbbingNote</h2>
-        <el-dropdown>
-          <i class="el-icon-setting" style="margin-right: 15px"></i>
-          <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item @click.native="logout">退出登录</el-dropdown-item>
-          </el-dropdown-menu>
-        </el-dropdown>
-        <span>Cherry</span>
-      </el-header>
-    </div>
-
-    <el-container style="height: 650px; border: 1px solid #eee; clear:both">
+    <el-container  class="container">
       <el-aside width="200px" style="background-color: rgb(238, 241, 246)">
         <el-menu>
           <el-submenu v-for="category in categories" :key="category.id" v-bind:index="category.id.toString()">
@@ -96,6 +82,7 @@ import Axios from 'axios';
 export default {
   data() {
     return {
+      userAccountName:'',
       userAccountId: this.$route.params.id,
       categories: [],
       content: '',
@@ -113,6 +100,16 @@ export default {
     }
   },
   mounted: function () {
+    var url = "useraccount/getCurrentUser"; 
+    let requestData = {
+      data: this.userAccountId
+    };
+    Axios.post(url, requestData).then((response) => {
+      console.log(response);
+      if(response && response.data && response.data.data) {
+        this.userAccountName = response.data.data.userName;
+      }
+    });
     this.listCategory();
   },
   methods: {
@@ -246,15 +243,15 @@ export default {
     float: left;
   }
 
-  .r1{
-    text-decoration: none;
-  }
   .el-icon-circle-plus-outline{
     font-size: 20px;
     color: rgb(33, 177, 221);
     margin: 19px 10px 20px 20px;
   }
-
+  .container{
+    border: 1px solid #eee;
+    min-height: 700px;
+  }
   /* 右键样式 */
 .right-menu {
   position: fixed;
