@@ -63,9 +63,7 @@
         <el-dropdown>
           <i class="el-icon-setting" style="margin-right: 15px"></i>
           <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item>查看</el-dropdown-item>
-            <el-dropdown-item>新增</el-dropdown-item>
-            <el-dropdown-item divided @click.native="logout">退出登录</el-dropdown-item>
+            <el-dropdown-item @click.native="logout">退出登录</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
         <span>Cherry</span>
@@ -85,7 +83,7 @@
         </el-menu>
       </el-aside>
       <el-container style="width: 650px; border: 1px solid #eee;">
-        <el-main>
+        <el-main style="white-space: pre">
           {{content}}
         </el-main>
       </el-container>
@@ -119,7 +117,7 @@ export default {
   },
   methods: {
     listCategory() {
-      var url = "http://192.168.43.221:8080/ebbingnote/category/list";  // TODO
+      var url = "category/list";  
       let requestData = {
         data: this.userAccountId
       };
@@ -156,7 +154,7 @@ export default {
       })
     },
     confirmCategory() {
-      var url = "http://192.168.43.221:8080/ebbingnote/category/add";
+      var url = "category/add";
       let requestData = {
         userAccountId: this.userAccountId,
         categoryName: this.categoryForm.name,
@@ -178,7 +176,7 @@ export default {
       });
     },
     confirmNote() {
-      var url = "http://192.168.43.221:8080/ebbingnote/document/add";
+      var url = "document/add";
       let requestData = {
         categoryId: this.noteForm.categoryId,
         title: this.noteForm.noteName,
@@ -201,7 +199,7 @@ export default {
       });
     },
     addCategory(noteId) {
-      var url = "http://192.168.43.221:8080/ebbingnote/document/detail";
+      var url = "document/detail";
       let requestData = {
         data: noteId
       };

@@ -1,55 +1,33 @@
 <template>
   <div>
     <el-card class="login-form-layout">
-      <el-form
-        autocomplete="on"
-        :model="loginForm"
-        ref="loginForm"
-        label-position="left"
-      >
+      <el-form autocomplete="on" :model="loginForm" ref="loginForm" label-position="left">
         <!-- <div style="text-align: center">
           <svg-icon icon-class="login-mall" style="width: 56px;height: 56px;color: #409EFF"></svg-icon>
         </div> -->
         <h2 class="login-title color-main">EbbingNote</h2>
         <el-form-item prop="username">
-          <el-input
-            name="username"
-            type="text"
-            v-model="loginForm.username"
-            autocomplete="on"
-            placeholder="请输入用户名"
-          >
-            <!-- <span slot="prefix">
-              <svg-icon icon-class="user" class="color-main"></svg-icon>
-            </span> -->
+          <el-input name="username" type="text" v-model="loginForm.username" autocomplete="on" placeholder="请输入用户名">
+            <span slot="prefix">
+              <i class="el-icon-user" style="width: 16px; color: #409EFF"></i>
+            </span>
           </el-input>
         </el-form-item>
         <el-form-item prop="password">
-          <el-input
-            name="password"
-            :type="pwdType"
-            @keyup.enter.native="handleLogin"
-            v-model="loginForm.password"
-            autocomplete="on"
-            placeholder="请输入密码"
-          >
-            <!-- <span slot="prefix">
-              <svg-icon icon-class="password" class="color-main"></svg-icon>
-            </span> -->
+          <el-input name="password" :type="pwdType" @keyup.enter.native="handleLogin" v-model="loginForm.password"
+            autocomplete="on" placeholder="请输入密码" @click="showPwd">
+            <span slot="prefix">
+              <i class="el-icon-view" style="width: 16px; color: #409EFF"></i>
+            </span>
             <!-- <span slot="suffix" @click="showPwd">
               <svg-icon icon-class="eye" class="color-main"></svg-icon>
             </span> -->
           </el-input>
         </el-form-item>
         <el-form-item style="margin-bottom: 60px">
-          <el-button style="width: 100%" type="primary" :loading="loading"
-            @click.native.prevent="handleLogin">
+          <el-button style="width: 100%" type="primary" :loading="loading" @click.native.prevent="handleLogin">
             登录
           </el-button>
-          <!-- <el-button style="width: 100%" type="primary"
-            >
-            登录
-          </el-button> -->
         </el-form-item>
       </el-form>
     </el-card>
@@ -63,14 +41,14 @@ export default {
   data() {
     return {
       loginForm: {
-        username: "Jack",
-        password: "asdasd123"
+        username: "",
+        password: ""
       },
       loading: false,
       pwdType: "password",
     };
   },
-  
+
   methods: {
     showPwd() {
       if (this.pwdType === "password") {
@@ -80,50 +58,25 @@ export default {
       }
     },
     handleLogin() {
-      var url = "http://192.168.43.221:8080/ebbingnote/useraccount/login";
-      let requestData = {userName : this.loginForm.username,password : this.loginForm.password};
-        Axios.post(url,requestData).then((response)=>{
-              let serverResponse = response.data;
-                if(serverResponse && serverResponse.data != null) {
-                    this.$router.push({path: "/home/"+serverResponse.data.id});
-                } else {
-                  alert('username or password is incorrect');
-                }
-            }).catch((error)=>{
-                console.log(error);
-            })
-    }
-      // this.$router.push({path: "/home"});
-      /* this.$refs.loginForm.validate(valid => {
-        if (valid) {
-          this.loading = true;
-          this.$store
-            .dispatch("Login", this.loginForm)
-            .then(response => {
-              this.loading = false;
-              let code = response.data.code;
-              if (code == 200) {
-                this.$router.push({
-                  path: "/success",
-                  query: { data: response.data.data }
-                });
-              } else {
-                this.$router.push({
-                  path: "/error",
-                  query: { message: response.data.message }
-                });
-              }
-            })
-            .catch(() => {
-              this.loading = false;
-            });
+      var url = "useraccount/login";
+      let requestData = {
+        userName: this.loginForm.username,
+        password: this.loginForm.password
+      };
+      Axios.post(url, requestData).then((response) => {
+        let serverResponse = response.data;
+        if (serverResponse && serverResponse.data != null) {
+          this.$router.push({
+            path: "/home/" + serverResponse.data.id
+          });
         } else {
-          // eslint-disable-next-line no-console
-          console.log("参数验证不合法！");
-          return false;
+          alert('username or password is incorrect');
         }
-      }); */
+      }).catch((error) => {
+        console.log(error);
+      })
     }
+  }
 };
 </script>
  

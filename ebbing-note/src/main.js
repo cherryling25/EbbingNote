@@ -3,6 +3,9 @@ import App from "./App.vue";
 import router from "./router";
 import store from "./store";
 import "./plugins/element.js";
+import Axios from 'axios';
+
+Axios.defaults.baseURL = "http://192.168.43.221:9090/"; // TODO
 
 Vue.config.productionTip = false;
 
