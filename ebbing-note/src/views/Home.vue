@@ -1,8 +1,12 @@
 <template>
   <div id="home">
     <div class="icon">
+        <i class="el-icon-circle-plus-outline"></i>
+            <el-button type="text" @click="dialogFormVisible = true">目录</el-button>
+          <i class="el-icon-circle-plus-outline"></i>
+            <el-button type="text" @click="dialogFormVisible1 = true">笔记</el-button>
       <!-- TODO -->
-      <el-dropdown trigger="click">   
+      <!-- <el-dropdown trigger="click">   
         <span style="font-size:14px; cursor: pointer;">
           <i class="el-icon-circle-plus-outline"></i>
           新建
@@ -12,11 +16,11 @@
           <el-dropdown-item>
             <el-button type="text" @click="dialogFormVisible = true">目录</el-button>
           </el-dropdown-item>
-          <el-dropdown-item divided>
+          <el-dropdown-item>
             <el-button type="text" @click="dialogFormVisible1 = true">笔记</el-button>
           </el-dropdown-item>
         </el-dropdown-menu>
-      </el-dropdown>
+      </el-dropdown> -->
 
       <!-- 弹出框1 -->
       <el-dialog title="目录" :visible.sync="dialogFormVisible" width="30%">
