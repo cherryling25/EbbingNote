@@ -38,8 +38,10 @@
         <el-form :model="noteForm">
           <el-form-item label="目录" :label-width="formLabelWidth">
             <el-select v-model="noteForm.categoryId" placeholder="请选择目录">
-              <el-option :label="category.categoryName" :value="category.id" v-for="category in categories"
-                :key="category.id"></el-option>
+              <template v-for="category in categories">
+                <el-option :label="category.categoryName" v-if="category.id != -1" :value="category.id" 
+                                :key="category.id"></el-option>
+              </template>
             </el-select>
           </el-form-item>
           <el-form-item label="名称" :label-width="formLabelWidth">
@@ -59,10 +61,10 @@
     <el-container  class="container">
       <el-aside width="200px" style="background-color: rgb(238, 241, 246)">
         <el-menu>
-          <el-submenu v-for="category in categories" :key="category.id" v-bind:index="category.id.toString()">
+          <el-submenu @contextmenu.prevent.native="deleteCategory(category)" v-for="category in categories" :key="category.id" v-bind:index="category.id.toString()">
             <template slot="title"><i class="el-icon-message"></i>{{category.categoryName}}</template>
             <el-menu-item-group>
-              <el-menu-item v-for="note in category.notes" :key="note.id" @click="addCategory(note.id)">{{note.title}}
+              <el-menu-item @contextmenu.prevent.native="deleteNote(note.id)" v-for="note in category.notes" :key="note.id" @click="detail(note.id)">{{note.title}}
               </el-menu-item>
             </el-menu-item-group>
           </el-submenu>
@@ -85,6 +87,7 @@ export default {
       userAccountName:'',
       userAccountId: this.$route.params.id,
       categories: [],
+      currentNoteId: null,
       content: '',
       dialogFormVisible: false,
       dialogFormVisible1: false,
@@ -105,7 +108,6 @@ export default {
       data: this.userAccountId
     };
     Axios.post(url, requestData).then((response) => {
-      console.log(response);
       if(response && response.data && response.data.data) {
         this.userAccountName = response.data.data.userName;
       }
@@ -156,7 +158,6 @@ export default {
         userAccountId: this.userAccountId,
         categoryName: this.categoryForm.name,
       };
-      console.log(requestData);
       Axios.post(url, requestData).then((response) => {
         if (response.data.data) {
           this.$notify({
@@ -179,7 +180,6 @@ export default {
         title: this.noteForm.noteName,
         content: this.noteForm.noteContent
       };
-      console.log(requestData);
       Axios.post(url, requestData).then((response) => {
         if (response.data.data) {
           this.$notify({
@@ -187,6 +187,7 @@ export default {
             type: 'success'
           });
           this.listCategory();
+          this.detail(response.data.data.id);
           this.dialogFormVisible1 = false;
         }else{
           this.$notify.error({
@@ -195,15 +196,56 @@ export default {
         }
       });
     },
-    addCategory(noteId) {
+    detail(noteId) {
       var url = "document/detail";
       let requestData = {
         data: noteId
       };
       Axios.post(url, requestData).then((response) => {
-        console.log(response);
+        this.currentNoteId = noteId;
         this.content = response.data.data.content;
       });
+    },
+    deleteCategory(category) {
+      if(category.notes && category.notes.length > 0) {
+        //this.$notify.error({message: '只能删除空目录',});
+        return;
+      }
+      var url = "category/delete";
+      let requestData = {
+        id: category.id
+      };
+      this.$confirm('确认删除吗?', '提示', {}).then(() => {
+          Axios.post(url, requestData).then((response) => {
+            if (response && response.data && response.data.data) {
+              this.listCategory();
+              this.$notify({
+                message: '删除成功',
+                type: 'success'
+              });
+            }
+          });
+      });
+    },
+    deleteNote(noteId) {
+        var url = "document/delete";
+        let requestData = {
+          id: noteId
+        };
+        this.$confirm('确认删除吗?', '提示', {}).then(() => {
+            Axios.post(url, requestData).then((response) => {
+              if (response && response.data && response.data.data) {
+                if(this.currentNoteId === noteId) {
+                  this.content = null;
+                };
+                this.listCategory();
+                this.$notify({
+                  message: '删除成功',
+                  type: 'success'
+                });
+              }
+            });
+        });
     },
     //退出登录
     logout: function () {
