@@ -1,21 +1,21 @@
 <template>
   <div id="home">
-    <div class="icon" style=" display: flex;">
+    <div class="icon" style="display: flex;">
       <el-aside width="200px">
         <span @click="dialogFormVisible = true">
           <i class="el-icon-circle-plus-outline"></i>
           <el-button type="text">目录</el-button>
         </span>
-        <span @click="dialogFormVisible = true">
+        <span @click="dialogFormVisible1 = true">
           <i class="el-icon-circle-plus-outline"></i>
           <el-button type="text">笔记</el-button>
         </span>
       </el-aside>
 
-      <el-header style="text-align: right; font-size: 12px;flex-grow: 1;">
+      <el-header style="text-align: right;font-size: 12px;flex-grow: 1;">
         <h2>EbbingNote</h2>
         <el-dropdown trigger="click">
-          <i class="el-icon-setting" style="margin-right: 15px"></i>
+          <i class="el-icon-setting" style="margin-right: 15px;"></i>
           <el-dropdown-menu slot="dropdown">
             <el-dropdown-item @click.native="logout">退出登录</el-dropdown-item>
           </el-dropdown-menu>
