@@ -1,8 +1,6 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
 import note from '../components/note.vue';
-import doc from '../components/doc.vue';
-import main from '../components/main.vue';
 
 Vue.use(VueRouter);
 
@@ -15,14 +13,6 @@ export const constantRouterMap = [
     {
       path: 'note/:id',
       component: note
-    },
-    {
-      path: 'doc',
-      component: doc
-    },
-    {
-      path: 'main',
-      component: main
     }
   ]
 }

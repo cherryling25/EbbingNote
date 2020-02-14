@@ -2,10 +2,14 @@
   <div id="home">
     <div class="icon" style=" display: flex;">
       <el-aside width="200px">
-        <i class="el-icon-circle-plus-outline"></i>
-        <el-button type="text" @click="dialogFormVisible = true">目录</el-button>
-        <i class="el-icon-circle-plus-outline"></i>
-        <el-button type="text" @click="dialogFormVisible1 = true">笔记</el-button>
+        <span @click="dialogFormVisible = true">
+          <i class="el-icon-circle-plus-outline"></i>
+          <el-button type="text">目录</el-button>
+        </span>
+        <span @click="dialogFormVisible = true">
+          <i class="el-icon-circle-plus-outline"></i>
+          <el-button type="text">笔记</el-button>
+        </span>
       </el-aside>
 
       <el-header style="text-align: right; font-size: 12px;flex-grow: 1;">
