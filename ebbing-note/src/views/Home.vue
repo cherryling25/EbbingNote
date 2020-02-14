@@ -24,59 +24,85 @@
       </el-header>
     </div>
 
-      <!-- 弹出框1 -->
-      <el-dialog title="新建目录" :visible.sync="dialogFormVisible" width="30%">
-        <el-form :model="categoryForm">
-          <el-form-item label="名称" :label-width="formLabelWidth">
-            <el-input v-model="categoryForm.name" autocomplete="off"></el-input>
-          </el-form-item>
-        </el-form>
-        <div slot="footer" class="dialog-footer">
-          <el-button @click="dialogFormVisible = false">取 消</el-button>
-          <el-button type="primary" @click="confirmCategory">确 定</el-button>
-        </div>
-      </el-dialog>
+    <!-- 弹出框1 -->
+    <el-dialog title="新建目录" :visible.sync="dialogFormVisible" width="30%">
+      <el-form :model="categoryForm">
+        <el-form-item label="名称" :label-width="formLabelWidth">
+          <el-input v-model="categoryForm.name" autocomplete="off"></el-input>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogFormVisible = false">取 消</el-button>
+        <el-button type="primary" @click="confirmCategory">确 定</el-button>
+      </div>
+    </el-dialog>
 
-      <!-- 弹出框2 -->
-      <el-dialog title="新建笔记" :visible.sync="dialogFormVisible1" top="10vh">
-        <el-form :model="noteForm">
-          <el-form-item label="目录" :label-width="formLabelWidth">
-            <el-select v-model="noteForm.categoryId" placeholder="请选择目录">
-              <template v-for="category in categories">
-                <el-option :label="category.categoryName" v-if="category.id != -1" :value="category.id" 
-                                :key="category.id"></el-option>
-              </template>
-            </el-select>
-          </el-form-item>
-          <el-form-item label="名称" :label-width="formLabelWidth">
-            <el-input v-model="noteForm.noteName" autocomplete="off"></el-input>
-          </el-form-item>
-          <el-form-item label="内容" :label-width="formLabelWidth">
-            <el-input autocomplete="off" type="textarea" :rows="10" placeholder="请输入内容" v-model="noteForm.noteContent">
-            </el-input>
-          </el-form-item>
-        </el-form>
-        <div slot="footer" class="dialog-footer">
-          <el-button @click="dialogFormVisible1 = false">取 消</el-button>
-          <el-button type="primary" @click="confirmNote">确 定</el-button>
-        </div>
-      </el-dialog>
+    <!-- 弹出框2 -->
+    <el-dialog title="新建笔记" :visible.sync="dialogFormVisible1" top="10vh">
+      <el-form :model="noteForm">
+        <el-form-item label="目录" :label-width="formLabelWidth">
+          <el-select v-model="noteForm.categoryId" placeholder="请选择目录">
+            <template v-for="category in categories">
+              <el-option :label="category.categoryName" v-if="category.id != -1" :value="category.id"
+                :key="category.id"></el-option>
+            </template>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="名称" :label-width="formLabelWidth">
+          <el-input v-model="noteForm.noteName" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="内容" :label-width="formLabelWidth">
+          <el-input autocomplete="off" type="textarea" :rows="10" placeholder="请输入内容" v-model="noteForm.noteContent">
+          </el-input>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogFormVisible1 = false">取 消</el-button>
+        <el-button type="primary" @click="confirmNote">确 定</el-button>
+      </div>
+    </el-dialog>
 
-    <el-container  class="container">
+    <el-dialog title="修改笔记" :visible.sync="dialogFormVisible2" top="10vh">
+      <el-form :model="modifyNoteForm">
+        <el-form-item label="目录" :label-width="formLabelWidth">
+          <el-select v-model="modifyNoteForm.categoryId" placeholder="请选择目录">
+            <template v-for="category in categories">
+              <el-option :label="category.categoryName" v-if="category.id != -1" :value="category.id"
+                :key="category.id"></el-option>
+            </template>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="名称" :label-width="formLabelWidth">
+          <el-input v-model="modifyNoteForm.title" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="内容" :label-width="formLabelWidth">
+          <el-input autocomplete="off" type="textarea" :rows="10" placeholder="请输入内容" v-model="modifyNoteForm.content">
+          </el-input>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogFormVisible2 = false">取 消</el-button>
+        <el-button type="primary" @click="confirmModifyNote">确 定</el-button>
+      </div>
+    </el-dialog>
+
+    <el-container class="container">
       <el-aside width="200px" style="background-color: rgb(238, 241, 246)">
         <el-menu>
-          <el-submenu @contextmenu.prevent.native="deleteCategory(category)" v-for="category in categories" :key="category.id" v-bind:index="category.id.toString()">
+          <el-submenu @contextmenu.prevent.native="deleteCategory(category)" v-for="category in categories"
+            :key="category.id" v-bind:index="category.id.toString()">
             <template slot="title"><i class="el-icon-message"></i>{{category.categoryName}}</template>
             <el-menu-item-group>
-              <el-menu-item @contextmenu.prevent.native="deleteNote(note.id)" v-for="note in category.notes" :key="note.id" @click="detail(note.id)">{{note.title}}
+              <el-menu-item @contextmenu.prevent.native="deleteNote(note.id)" v-for="note in category.notes"
+                :key="note.id" @click.native="detail(note.id)">{{note.title}}
               </el-menu-item>
             </el-menu-item-group>
           </el-submenu>
         </el-menu>
       </el-aside>
-      <el-container style="width: 650px; border: 1px solid #eee;">
+      <el-container @dblclick.native="modifyNote()" style="width: 650px; border: 1px solid #eee;">
         <el-main style="white-space: pre">
-          {{content}}
+          {{currentNote == null ? '' : currentNote.content}}
         </el-main>
       </el-container>
     </el-container>
@@ -88,13 +114,13 @@ import Axios from 'axios';
 export default {
   data() {
     return {
-      userAccountName:'',
+      userAccountName: '',
       userAccountId: this.$route.params.id,
       categories: [],
-      currentNoteId: null,
-      content: '',
+      currentNote: {},
       dialogFormVisible: false,
       dialogFormVisible1: false,
+      dialogFormVisible2: false,
       formLabelWidth: '70px',
       categoryForm: {
         name: ''
@@ -103,16 +129,22 @@ export default {
         categoryId: '',
         noteName: '',
         noteContent: '',
-      }
+      },
+      modifyNoteForm: {
+        id: '',
+        categoryId: '',
+        title: '',
+        content: '',
+      },
     }
   },
   mounted: function () {
-    var url = "useraccount/getCurrentUser"; 
+    var url = "useraccount/getCurrentUser";
     let requestData = {
       data: this.userAccountId
     };
     Axios.post(url, requestData).then((response) => {
-      if(response && response.data && response.data.data) {
+      if (response && response.data && response.data.data) {
         this.userAccountName = response.data.data.userName;
       }
     });
@@ -120,7 +152,7 @@ export default {
   },
   methods: {
     listCategory() {
-      var url = "category/list";  
+      var url = "category/list";
       let requestData = {
         data: this.userAccountId
       };
@@ -170,10 +202,10 @@ export default {
           });
           this.listCategory();
           this.dialogFormVisible = false;
-        }else{
+        } else {
           this.$notify.error({
-          message: '创建失败'
-        });
+            message: '创建失败'
+          });
         }
       });
     },
@@ -193,10 +225,10 @@ export default {
           this.listCategory();
           this.detail(response.data.data.id);
           this.dialogFormVisible1 = false;
-        }else{
+        } else {
           this.$notify.error({
-          message: '创建失败'
-        });
+            message: '创建失败'
+          });
         }
       });
     },
@@ -206,12 +238,11 @@ export default {
         data: noteId
       };
       Axios.post(url, requestData).then((response) => {
-        this.currentNoteId = noteId;
-        this.content = response.data.data.content;
+        this.currentNote = response.data.data;
       });
     },
     deleteCategory(category) {
-      if(category.notes && category.notes.length > 0) {
+      if (category.notes && category.notes.length > 0) {
         //this.$notify.error({message: '只能删除空目录',});
         return;
       }
@@ -220,36 +251,60 @@ export default {
         id: category.id
       };
       this.$confirm('确认删除吗?', '提示', {}).then(() => {
-          Axios.post(url, requestData).then((response) => {
-            if (response && response.data && response.data.data) {
-              this.listCategory();
-              this.$notify({
-                message: '删除成功',
-                type: 'success'
-              });
-            }
-          });
+        Axios.post(url, requestData).then((response) => {
+          if (response && response.data && response.data.data) {
+            this.listCategory();
+            this.$notify({
+              message: '删除成功',
+              type: 'success'
+            });
+          }
+        });
       });
     },
     deleteNote(noteId) {
-        var url = "document/delete";
-        let requestData = {
-          id: noteId
-        };
-        this.$confirm('确认删除吗?', '提示', {}).then(() => {
-            Axios.post(url, requestData).then((response) => {
-              if (response && response.data && response.data.data) {
-                if(this.currentNoteId === noteId) {
-                  this.content = null;
-                };
-                this.listCategory();
-                this.$notify({
-                  message: '删除成功',
-                  type: 'success'
-                });
-              }
+      var url = "document/delete";
+      let requestData = {
+        id: noteId
+      };
+      this.$confirm('确认删除吗?', '提示', {}).then(() => {
+        Axios.post(url, requestData).then((response) => {
+          if (response && response.data && response.data.data) {
+            if (this.currentNote.id === noteId) {
+              this.content = null;
+            };
+            this.listCategory();
+            this.$notify({
+              message: '删除成功',
+              type: 'success'
             });
+          }
         });
+      });
+    },
+    modifyNote() {
+      if (this.currentNote && this.currentNote.id) {
+        this.modifyNoteForm = this.currentNote;
+        this.dialogFormVisible2 = true;
+      }
+    },
+    confirmModifyNote() {
+      var url = "document/modify";
+      Axios.post(url, this.modifyNoteForm).then((response) => {
+        if (response.data.data) {
+          this.$notify({
+            message: '修改成功',
+            type: 'success'
+          });
+          this.listCategory();
+          this.detail(response.data.data.id);
+          this.dialogFormVisible2 = false;
+        } else {
+          this.$notify.error({
+            message: '修改失败'
+          });
+        }
+      });
     },
     //退出登录
     logout: function () {
