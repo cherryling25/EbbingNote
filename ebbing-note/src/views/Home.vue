@@ -328,6 +328,7 @@ export default {
   h2{
     margin: 0 40%;
     border:0px solid red;
+    font-family: 'Courier New', Courier, monospace;
   }
   
   .el-header {
