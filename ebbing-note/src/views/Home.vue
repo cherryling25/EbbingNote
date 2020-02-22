@@ -1,6 +1,6 @@
 <template>
   <div id="home">
-    <div class="icon" style="display: flex;">
+    <div class="icon" style="display: flex;" >
       <el-aside width="200px">
         <span @click="dialogFormVisible = true">
           <i class="el-icon-circle-plus-outline"></i>
@@ -91,11 +91,18 @@
         <el-menu>
           <el-submenu @contextmenu.prevent.native="deleteCategory(category)" v-for="category in categories"
             :key="category.id" v-bind:index="category.id.toString()">
-            <template slot="title"><i class="el-icon-message"></i>{{category.categoryName}}</template>
+            <template slot="title"><i class="el-icon-folder"></i>{{category.categoryName}}
+            </template>
             <el-menu-item-group>
-              <el-menu-item @contextmenu.prevent.native="deleteNote(note.id)" v-for="note in category.notes"
-                :key="note.id" @click.native="detail(note.id)">{{note.title}}
+              <el-menu-item   @contextmenu.prevent.native="deleteNote(note.id)" v-for="note in category.notes"
+                :key="note.id" @click.native="detail(note.id)">
+                <template slot="title" style="position: relative;"><i class="el-icon-edit-outline"></i>
+                {{note.title}} 
+                <span class="noteTime">{{note.createdDate}}</span>
+                 </template>
               </el-menu-item>
+           
+              
             </el-menu-item-group>
           </el-submenu>
         </el-menu>
@@ -170,7 +177,7 @@ export default {
                   id: documentList[j].id,
                   title: documentList[j].title,
                   status: documentList[j].status,
-                  createdDate: documentList[j].createdDate
+                  createdDate: new Date(documentList[j].createdDate).toLocaleDateString(),
                 };
                 documentArray.push(note);
               }
@@ -350,48 +357,32 @@ export default {
     color: rgb(33, 177, 221);
     margin: 19px 10px 20px 20px;
   }
+  .el-submenu .el-menu-item {
+    height: 50px;
+    line-height: 35px;
+}
+  .el-submenu{
+    line-height: 35px;
+  }
+  .el-submenu__title{
+    line-height: 35px;
+    height: 35px;
+  }
+  .noteTime{
+    position: absolute;
+    top: 20px;
+    right:10px;
+    font-size: 12px;
+    color: #008080;
+  }
+  .el-menu-item-group__title {
+    padding:0; 
+    line-height: normal;
+  }
   .container{
     border: 1px solid #eee;
     min-height: 700px;
   }
-  /* 右键样式 */
-.right-menu {
-  position: fixed;
-  background: #fff;
-  border: solid 1px rgba(0, 0, 0, .2);
-  border-radius: 3px;
-  z-index: 999;
-  display: none;
-}
-.right-menu a {
-  width: 75px;
-  height: 28px;
-  line-height: 28px;
-  text-align: center;
-  display: block;
-  color: #1a1a1a;
-}
-.right-menu a:hover {
-  background: #eee;
-  color: #fff;
-}
-.right-menu {
-  border: 1px solid #eee;
-  box-shadow: 0 0.5em 1em 0 rgba(0,0,0,.1);
-  border-radius: 1px;
-}
-a {
-  color: #333;
-  text-decoration: none;
-}
-.right-menu a {
-  padding: 2px;
-}
-.right-menu a:hover {
-  background: #42b983;
-}
-path {
-  fill: black;
-}
+  
 </style>
 
