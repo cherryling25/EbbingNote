@@ -1,12 +1,12 @@
 <template>
   <div id="home">
     <div class="icon" style="display: flex;" >
-      <el-aside width="200px">
-        <span @click="dialogFormVisible = true">
+      <el-aside width="260px">
+        <span @click="dialogFormVisible = true" style="margin-left:11px;">
           <i class="el-icon-circle-plus-outline"></i>
           <el-button type="text">目录</el-button>
         </span>
-        <span @click="dialogFormVisible1 = true">
+        <span @click="dialogFormVisible1 = true" style="margin-left:11px;">
           <i class="el-icon-circle-plus-outline"></i>
           <el-button type="text">笔记</el-button>
         </span>
@@ -87,7 +87,7 @@
     </el-dialog>
 
     <el-container class="container">
-      <el-aside width="200px" style="background-color: rgb(238, 241, 246)">
+      <el-aside width="260px" style="background-color: rgb(238, 241, 246)">
         <el-menu>
           <el-submenu @contextmenu.prevent.native="deleteCategory(category)" v-for="category in categories"
             :key="category.id" v-bind:index="category.id.toString()">
@@ -95,8 +95,8 @@
             </template>
             <el-menu-item-group>
               <el-menu-item   @contextmenu.prevent.native="deleteNote(note.id)" v-for="note in category.notes"
-                :key="note.id" @click.native="detail(note.id)">
-                <template slot="title" style="position: relative;"><i class="el-icon-edit-outline"></i>
+                :key="note.id" @click.native="detail(note)">
+                <template slot="title" style="position: relative;"><i :class="note.icon"></i>
                 {{note.title}} 
                 <span class="noteTime">{{note.createdDate}}</span>
                  </template>
@@ -177,8 +177,12 @@ export default {
                   id: documentList[j].id,
                   title: documentList[j].title,
                   status: documentList[j].status,
+                  icon: 'el-icon-document',
                   createdDate: new Date(documentList[j].createdDate).toLocaleDateString(),
                 };
+                if(note.title.length > 10) {
+                    note.title = note.title.substr(0,11) + ' . . .';
+                }
                 documentArray.push(note);
               }
             }
@@ -230,7 +234,7 @@ export default {
             type: 'success'
           });
           this.listCategory();
-          this.detail(response.data.data.id);
+          this.detail(response.data.data);
           this.dialogFormVisible1 = false;
         } else {
           this.$notify.error({
@@ -239,13 +243,21 @@ export default {
         }
       });
     },
-    detail(noteId) {
+    detail(note) {
+      for (var i = 0; i < this.categories.length; i++) {
+        for(var j=0; j < this.categories[i].notes.length;j++) {
+            if(this.categories[i].notes[j].icon != 'el-icon-document'){
+              this.categories[i].notes[j].icon = 'el-icon-document';
+            }
+        }
+      }
       var url = "document/detail";
       let requestData = {
-        data: noteId
+        data: note.id
       };
       Axios.post(url, requestData).then((response) => {
         this.currentNote = response.data.data;
+        note.icon = 'el-icon-edit';
       });
     },
     deleteCategory(category) {
@@ -304,7 +316,7 @@ export default {
             type: 'success'
           });
           this.listCategory();
-          this.detail(response.data.data.id);
+          this.detail(response.data.data);
           this.dialogFormVisible2 = false;
         } else {
           this.$notify.error({
@@ -358,20 +370,20 @@ export default {
     margin: 19px 10px 20px 20px;
   }
   .el-submenu .el-menu-item {
-    height: 50px;
+    height: 55px;
     line-height: 35px;
 }
   .el-submenu{
     line-height: 35px;
   }
   .el-submenu__title{
-    line-height: 35px;
-    height: 35px;
+    line-height: 45px;
+    height: 45px;
   }
   .noteTime{
     position: absolute;
-    top: 20px;
-    right:10px;
+    top: 25px;
+    right:20px;
     font-size: 12px;
     color: #008080;
   }
