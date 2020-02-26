@@ -97,7 +97,7 @@
               <el-menu-item   @contextmenu.prevent.native="deleteNote(note.id)" v-for="note in category.notes"
                 :key="note.id" @click.native="detail(note)">
                 <template slot="title" style="position: relative;"><i :class="note.icon"></i>
-                {{note.title}} 
+                <span class="noteTitle">{{note.title}}</span>
                 <span class="noteTime">{{note.createdDate}}</span>
                  </template>
               </el-menu-item>
@@ -163,6 +163,7 @@ export default {
       let requestData = {
         data: this.userAccountId
       };
+
       Axios.post(url, requestData).then((response) => {
         let serverResponse = response.data;
         if (serverResponse && serverResponse.data != null) {
@@ -180,9 +181,9 @@ export default {
                   icon: 'el-icon-document',
                   createdDate: new Date(documentList[j].createdDate).toLocaleDateString(),
                 };
-                if(note.title.length > 10) {
-                    note.title = note.title.substr(0,11) + ' . . .';
-                }
+                // if(getLength(note.title) > 20) {
+                //     note.title = note.title.substr(0,10) + ' . . .';
+                // }
                 documentArray.push(note);
               }
             }
@@ -386,6 +387,13 @@ export default {
     right:20px;
     font-size: 12px;
     color: #008080;
+  }
+  .noteTitle{
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis; 
+    width:160px; 
+    display:inline-block;
   }
   .el-menu-item-group__title {
     padding:0; 
