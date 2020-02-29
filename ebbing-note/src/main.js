@@ -5,8 +5,8 @@ import store from "./store";
 import "./plugins/element.js";
 import Axios from 'axios';
 
-//Axios.defaults.baseURL = "http://192.168.43.221:9090/";
-Axios.defaults.baseURL = "http://192.168.1.100:8888/";
+Axios.defaults.baseURL = "http://192.168.1.100:9090/";
+//Axios.defaults.baseURL = "http://192.168.1.100:8888/";
 
 Vue.config.productionTip = false;
 
